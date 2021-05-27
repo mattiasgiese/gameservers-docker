@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 ARG TZ="Etc/UTC"
 RUN sed -i 's/archive.ubuntu.com/au.archive.ubuntu.com/' /etc/apt/sources.list
 RUN apt-get update  && apt-get dist-upgrade -y &&\
@@ -7,4 +7,4 @@ RUN apt-get update  && apt-get dist-upgrade -y &&\
 RUN echo "$TZ" > /etc/timezone
 RUN  ln -fs /usr/share/zoneinfo/$TZ /etc/localtime
 
-# add to base install: 
+# add to base install:
