@@ -1,7 +1,4 @@
-FROM wine
-
-USER root
-
+FROM gameservers/wine
 
 USER steam
 WORKDIR /steam/steamcmd_linux
