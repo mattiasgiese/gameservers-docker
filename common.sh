@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PREFIX=gameservers
 
 gettimestamp() {
 	date +%Y%m%d-%H%M%S
@@ -18,10 +19,15 @@ docker_build() {
     [[ -z $DOCKERFILE ]] && DOCKERFILE="-f Dockerfile" || DOCKERFILE="-f ${DOCKERFILE}"
     [[ -z $OVERRIDEDIR ]] && DIR="." || DIR=$OVERRIDEDIR
 
-	local PARENT="$(get_docker_parent $NAME)"
+	local PARENT="${PREFIX}/$(get_docker_parent $NAME)"
 	[[ -n $PARENT ]] && docker_build_if_needed $PARENT
         [[ -n $NOCACHE ]] && CACHE="--no-cache"
-	(cd $BASE_DIR/$NAME && docker build $DOCKERFILE $CACHE $OTHERARGS -t $NAME -t $NAME:$(gettimestamp) $DIR )
+	(\
+		cd "$BASE_DIR/$NAME" && docker build "$DOCKERFILE" "$CACHE" "$OTHERARGS" \
+		-t "${PREFIX}/${NAME}" \
+		-t "${PREFIX}/${NAME}:$(gettimestamp)" \
+		"$DIR" \
+	)
 }
 
 # Builds a container if it doesn't already have a latest
